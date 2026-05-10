@@ -1,6 +1,6 @@
 
 module Comparator #(
-    parameter N = 8
+    parameter N = 100
 )(
     input  logic [N-1:0] a_i,
     input  logic [N-1:0] b_i,
