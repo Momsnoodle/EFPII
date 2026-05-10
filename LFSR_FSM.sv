@@ -2,7 +2,7 @@
 module LFSR (
     input  logic clk_i,
     input  logic reset_i,
-    output logic [7:0] lfsr_o
+    output logic [99:0] lfsr_o
 );
 
 always_ff @(posedge clk_i) begin
