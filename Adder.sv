@@ -1,5 +1,5 @@
 module ScoreAdder #(
-    parameter N = 
+    parameter N = 100
 )(
     input  logic [N-1:0] compare_i,
     output logic [$clog2(N+1)-1:0] score_o
