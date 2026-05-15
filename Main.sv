@@ -1,5 +1,5 @@
 module Main#(
-  parameter DIVIDER_LEN = 500000;
+  parameter DIVIDER_LEN = 5000000;
   parameter TIMER_W = 16;
   parameter DIGITS_N = 5;
   parameter DIGITS_BCD_W = 4;
@@ -19,7 +19,8 @@ module Main#(
 );
 
   // Signal definition
-  logic tick;
+  logic tick_fast;
+  logic tick_slow;
   logic clk;
   logic reset;
 
@@ -45,11 +46,18 @@ module Main#(
     .reset_o(reset)
   );
 
-  // generate the tick (one pulse every 10 ms)
-  TickGen #(.DIVIDER(DIVIDER_LEN),.REG_W(24)) tickGen (
+  // generate the tick for input sequence (one pulse every 100 ms)
+  TickGen #(.DIVIDER(DIVIDER_LEN),.REG_W(24)) tickGen_fast (
     .clk_i  (clk),
     .reset_i(reset),
-    .tick_o (tick)
+    .tick_o (tick_fast)
+  );
+
+  // generate the tick for random generated sequence (one pulse every 500 ms)
+  TickGen #(.DIVIDER(5*DIVIDER_LEN),.REG_W(24)) tickGen_slow (
+    .clk_i  (clk),
+    .reset_i(reset),
+    .tick_o (tick_slow)
   );
 
   // logic [99:0] generated_sequence;
@@ -82,6 +90,7 @@ module Main#(
         .in_i(stm_in_debounced[i]),
         .pulse_o(stm_in[i])
       );
+      // TODO: if the current button is the play button and the current state is the play state, save the button state in a register
     end
 
   endgenerate
@@ -94,7 +103,7 @@ module Main#(
   BinBCD #(.BINARY_W(TIMER_W), .DIGITS_N(DIGITS_N), .DIGITS_BCD_W(DIGITS_BCD_W)) binBcd(
     .clk_i(clk),
     .reset_i(reset),
-    .start_i(tick),
+    .start_i(tick_2),
     .binary_i(timer),
     .bcd_o(bcd)
   );
