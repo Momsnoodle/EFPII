@@ -35,7 +35,7 @@ module LED_Sequence_Display #(
         if (rst_i) begin
 
             index_q <= '0;
-            done_o  <= 1'b0;
+            done_o  <= 1'b0; // 1 bit binary set to 0
             led_o   <= 1'b0;
 
         end

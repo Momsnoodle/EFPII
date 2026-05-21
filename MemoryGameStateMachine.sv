@@ -34,7 +34,7 @@ module MemoryGameStateMachine #(
         COUNTDOWN,
         PLAYING,
         SCORING,
-        DISPLAYSCORE
+        ENDGAME
     } state_e;
 
     typedef struct packed { // make a packed state variable with the logic states, the score and the seqences (stored in registers then)
@@ -66,7 +66,11 @@ module MemoryGameStateMachine #(
     logic countdown_done;
     logic start_countdown;
 
+    logic score_done;
+
+
     assign start_countdown = (state_out.state == COUNTDOWN); //1 if COUNTDOWN, 0 ELSE
+
 
     // Instantiate the modules with the proper input 
 
@@ -140,7 +144,9 @@ module MemoryGameStateMachine #(
     Comparator #(
         .SEQ_LENGTH(SEQ_W)
     ) comparator_inst (
-        .enable_i(state_out.state == SCORING)
+        .clk_i(clk_i),
+        .rst_i(reset_or_begin_i),
+        .enable_i(state_out.state == SCORING),
         .seq_a_i(state_out.seq_gen),
         .seq_b_i(state_out.seq_in),
         .result_o(matches),
@@ -154,6 +160,7 @@ module MemoryGameStateMachine #(
         .compare_i(matches),
         .score_o(calculated_score),
         .enable_i(state_out.state == SCORING && compare_done),
+        .rst_i(reset_or_begin_i),
         .done_o(score_done)
     );
 
@@ -166,11 +173,13 @@ module MemoryGameStateMachine #(
             state_out.seq_gen <= '0;
             state_out.seq_in  <= '0;
             
-            player_done <= '0;
-            display_done <= '0;
-            compare_done <= '0;
-            score_done <= '0;
-            calculated_score <= '0;
+
+            ///SHOULD DO THIS INSIDE OF THE SUBMODULES!!! --> BY SENDING THE RESET
+            //player_done <= '0;
+            //display_done <= '0;
+            //compare_done <= '0;
+            //score_done <= '0;
+            //calculated_score <= '0;
         end
         else begin
             state_out <= state_in;
@@ -213,8 +222,7 @@ module MemoryGameStateMachine #(
                 state_in.state = IDLE;
             end
             
-            start_countdown <= 1; // enable the counting
-            
+    
             else if (countdown_done) begin
                 state_in.state = PLAYING;
             end
@@ -249,7 +257,7 @@ module MemoryGameStateMachine #(
             if (reset_or_begin_i) begin
                 state_in.state = IDLE;
             end
-            assign score = state_out.score; 
+            score = state_out.score; 
             
         end
     
@@ -262,7 +270,7 @@ module MemoryGameStateMachine #(
 
     end
 
-    
+    assign score = state_out.score  //1 if COUNTDOWN, 0 ELSE
 
 endmodule
 
