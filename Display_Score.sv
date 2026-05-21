@@ -1,3 +1,38 @@
+module Score_Display #(
+    parameter SCORE_W = 100
+)(
+    input  logic clk_i,
+    input  logic rst_i,
+
+    // enable playback
+    input  logic enable_i,
+
+    // sequence to display
+    input  logic [SCORE_W-1:0] score,
+
+    // LED output
+    output logic digit0,
+    output logic digit1,
+    output logic digit2,
+    output logic digit3
+
+   
+);
+
+    //------------------------------------------------------------
+    // Display logic
+    //------------------------------------------------------------
+
+    always_ff @(posedge clk_i) begin
+
+
+
+    end
+
+endmodule
+
+
+
 module BinBCD #(
   parameter BINARY_W= 16;
   parameter DIGITS_N = 5; 
@@ -7,7 +42,6 @@ module BinBCD #(
   input         reset_i,
   input         start_i,
   input unsigned [BINARY_W-1:0] binary_i,
-  input logic enable_i,
   
   output unsigned [DIGITS_BCD_W-1:0] bcd_o [DIGITS_N-1:0]
   );
@@ -51,7 +85,7 @@ module BinBCD #(
     scratch_next_d     = scratch_q;
     output_reg_next_d  = output_reg_q;
     
-    if (enable_i) begin
+    
     // initialize the scratch pad and wait for start
     if (state_q == WAIT_START) begin
       scratch_next_d[BINARY_W-1:0] = binary_i[BINARY_W-1:0];
@@ -86,8 +120,6 @@ module BinBCD #(
     if (state_q == WAIT_START_LOW) begin
       output_reg_next_d[DIGITS_BCD_W*DIGITS_N-1 : 0] = scratch_q[DIGITS_N*DIGITS_BCD_W+BINARY_W-1 : BINARY_W];
       if (!start_i) state_next_d = WAIT_START;
-    end
-
     end
     
   end // always_comb
