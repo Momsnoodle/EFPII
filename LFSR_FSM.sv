@@ -1,7 +1,8 @@
 
 module LFSR_Sequence_Generator #(
     parameter SEQ_LENGTH = 100,
-    parameter LFSR_WIDTH = 16
+    parameter LFSR_WIDTH = 16,
+    parameter MULTIPLIER = 10, // tick fast divided tick slow
 )(
     input  logic clk_i,
     input  logic rst_i,
@@ -46,9 +47,9 @@ module LFSR_Sequence_Generator #(
     // Main logic
     //============================================================
 
-    always_ff @(posedge clk_i) begin
+always_ff @(posedge clk_i) begin
 
-        if (rst_i) begin
+   if (rst_i) begin
 
             // Non-zero seed
             lfsr_q        <= 16'hACE1;
@@ -60,44 +61,32 @@ module LFSR_Sequence_Generator #(
             bit_counter_q <= '0;
 
             done_o        <= 1'b0;
+   end
 
-        end
-        else if (tick_i && enable_i && !done_o) begin
+    else if (tick_i && enable_i && !done_o) begin
 
-            //----------------------------------------------------
-            // Advance LFSR
-            //----------------------------------------------------
+        if (mult_cnt == MULTIPLIER-1) begin
 
+            // advance LFSR ONLY here
             lfsr_q <= {
                 lfsr_q[LFSR_WIDTH-2:0],
-                feedback
+                (lfsr_q[15] ^ lfsr_q[13] ^ lfsr_q[12] ^ lfsr_q[10])
             };
 
-            //----------------------------------------------------
-            // Store random bit into sequence
-            //----------------------------------------------------
+            mult_cnt <= '0;
+        end
 
-            sequence_o <= {
-                sequence_o[SEQ_LENGTH-2:0],
-                lfsr_q[0]
-            };
+        else begin
+            mult_cnt <= mult_cnt + 1;
+        end
 
-            //----------------------------------------------------
-            // Count generated bits
-            //----------------------------------------------------
 
-            bit_counter_q <= bit_counter_q + 1;
-
-            //----------------------------------------------------
-            // Generation complete
-            //----------------------------------------------------
-
-            if (bit_counter_q == SEQ_LENGTH-1) begin
+        if (bit_counter_q == SEQ_LENGTH-1) begin
                 done_o <= 1'b1;
             end
-
-        end
     end
+end
+
 
 endmodule
 
