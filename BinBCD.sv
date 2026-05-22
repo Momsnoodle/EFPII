@@ -1,6 +1,6 @@
 module BinBCD #(
   parameter BINARY_W= 16,
-  parameter DIGITS_N = 5,  //what are theeese
+  parameter DIGITS_N = 5,  
   parameter DIGITS_BCD_W = 4 
   )(
   input         clk_i,
@@ -11,7 +11,7 @@ module BinBCD #(
   
   //output unsigned [DIGITS_BCD_W-1:0] bcd_o  ????
 
-  output logic [DIGITS_N-1:0][DIGITS_BCD_W-1:0] bcd_o
+  output logic [DIGITS_BCD_W-1:0] bcd_o [DIGITS_N-1:0]
   );
 
   logic unsigned [DIGITS_N*DIGITS_BCD_W+ BINARY_W-1 : 0] scratch_q, scratch_next_d, scratch_add;
