@@ -1,5 +1,6 @@
 module Countdown #(
-    parameter START_VALUE = 2'b10
+    parameter START_VALUE = 2'b10,
+    parameter SCORE_W = 10
 )(
     input  logic clk_i,
     input  logic rst_i,
@@ -11,7 +12,7 @@ module Countdown #(
     input  logic tick_i,
 
     // current displayed value
-    output logic [$clog2(START_VALUE+1)-1:0] value_o,
+    output logic [SCORE_W-1:0] value_o,
 
     // high when finished
     output logic done_o

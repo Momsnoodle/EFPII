@@ -65,7 +65,7 @@ module MemoryGameStateMachine #(
     logic compare_done;
     logic [SCORE_W-1:0] calculated_score;
 
-    logic [1:0] countdown_out; //2 bit for 3,2,1,0
+    logic [SCORE_W-1:0] countdown_out; //2 bit for 3,2,1,0
     logic countdown_done;
     //logic start_countdown;
 
@@ -114,7 +114,8 @@ module MemoryGameStateMachine #(
     // =========================================================
 
     Countdown #(
-        .START_VALUE(2'b10)
+        .START_VALUE(2'b10),
+        .SCORE_W(SCORE_W)
     ) countdown_inst (
         .clk_i(clk_i),
         .rst_i(reset_or_begin_i),
