@@ -114,7 +114,7 @@ module MemoryGameStateMachine #(
     // =========================================================
 
     Countdown #(
-        //.START_VALUE(3)
+        .START_VALUE(2'b10)
     ) countdown_inst (
         .clk_i(clk_i),
         .rst_i(reset_or_begin_i),
@@ -156,17 +156,19 @@ module MemoryGameStateMachine #(
         .done_o(compare_done)
     );
 
-    ScoreAdder #(
-        .SEQ_LENGTH(SEQ_W)
-        //.SCORE_W(SCORE_W) 
-    ) adder_inst (
-        .compare_i(num_correct),
-        .score_o(calculated_score),
-        .enable_i(state_out.state == SCORING && compare_done),
-        .rst_i(reset_or_begin_i),
-        .done_o(score_done)
-    );
+    
 
+    ScoreAdder #(
+    .SEQ_LENGTH(SEQ_W),
+    .SCORE_W(SCORE_W)
+    ) adder_inst (
+    .clk_i(clk_i),
+    .rst_i(reset_or_begin_i),
+    .compare_i(num_correct),
+    .enable_i(state_out.state == SCORING && compare_done),
+    .score_o(calculated_score),
+    .done_o(score_done)
+    );
 
     always_ff @(posedge clk_i) begin
 
