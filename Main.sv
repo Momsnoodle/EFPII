@@ -1,7 +1,7 @@
 module Main #(
   parameter DIVIDER_LEN = 5000000,
   parameter SCORE_W = 10, // such that 2**SCORE_W > SEQ_LENGTH
-  parameter DIGITS_N = 9, // what is this supposed to be ???
+  parameter DIGITS_N = 5, // what is this supposed to be ???
   parameter DIGITS_BCD_W = 4, // what is this supposed to be ???
   parameter OVERSAMPLING = 5,
   parameter OVERSAMPLING_COUNTDOWN = 10,
@@ -11,6 +11,7 @@ module Main #(
   input  logic [1:0]  KEY,
   output logic [9:0]  LEDR,
   input  logic [9:0]  SW,
+  output logic [7:0]  HEX0_COUNTDOWN,
   output logic [7:0]  HEX0,
   output logic [7:0]  HEX1,
   output logic [7:0]  HEX2,
@@ -92,14 +93,11 @@ module Main #(
   // =========================================================
 
   logic [SCORE_W-1:0] score;
-  logic [DIGITS_N-1:0][3:0] bcd;
+  logic [DIGITS_BCD_W-1:0] bcd_score [DIGITS_N-1:0];
+  logic [DIGITS_BCD_W-1:0] bcd_countdown [DIGITS_N-1:0];
   logic [SCORE_W-1:0] countdown_value; // good states are always 00,01,10, but 11 is too much
   logic enable_countdown;
 
-  logic [6:0] digit0_value;
-  logic [6:0] digit1_value;
-  logic [6:0] digit2_value;
-  logic [6:0] digit3_value;
 
   BinBCD #(
     .BINARY_W(SCORE_W),
@@ -110,7 +108,7 @@ module Main #(
     .reset_i(reset),
     .start_i(tick_fast),
     .binary_i(score),
-    .bcd_o(bcd),
+    .bcd_o(bcd_score),
     .enable_i(score != '0) // display it only if this is on
   );
 
@@ -124,23 +122,27 @@ BinBCD #(
     .reset_i(reset),
     .start_i(tick_fast),
     .binary_i(countdown_value),
-    .bcd_o(bcd),
+    .bcd_o(bcd_countdown),
     .enable_i(enable_countdown) // display it only if this is on
   );
 
-  SevenSegment digit0(bcd[0], HEX0[6:0]);
+
+  SevenSegment digit0_countdown(bcd_countdown[0], HEX0_COUNTDOWN[6:0]);
   assign HEX0[7] = 1'b1;
 
-  SevenSegment digit1(bcd[1], HEX1[6:0]);
+  SevenSegment digit0(bcd_score[0], HEX0[6:0]);
+  assign HEX0[7] = 1'b1;
+
+  SevenSegment digit1(bcd_score[1], HEX1[6:0]);
   assign HEX1[7] = 1'b1;
 
-  SevenSegment digit2(bcd[2], HEX2[6:0]);
+  SevenSegment digit2(bcd_score[2], HEX2[6:0]);
   assign HEX2[7] = 1'b0;
 
-  SevenSegment digit3(bcd[3], HEX3[6:0]);
+  SevenSegment digit3(bcd_score[3], HEX3[6:0]);
   assign HEX3[7] = 1'b1;
 
-  SevenSegment digit4(bcd[4], HEX4[6:0]);
+  SevenSegment digit4(bcd_score[4], HEX4[6:0]);
   assign HEX4[7] = 1'b1;
 
   // =========================================================
