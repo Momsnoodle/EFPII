@@ -21,8 +21,9 @@ always_comb begin
 
     if (!rst_i && enable_i) begin
         for (i = 0; i < SEQ_LENGTH; i++) begin
-           if (compare[i])
+           if (compare_i[i])begin
             sum = sum + 1; // add one to it
+           end
         end
     end
 

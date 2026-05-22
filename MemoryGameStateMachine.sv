@@ -21,7 +21,7 @@ module MemoryGameStateMachine #(
 
     output logic led_o,
     output logic unsigned [SCORE_W-1:0] score,
-    output logic unsigned [1:0] countdown_value,
+    output logic unsigned [SCORE_W-1:0] countdown_value,
     output logic start_countdown
 
 );

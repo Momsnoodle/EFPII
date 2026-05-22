@@ -1,9 +1,10 @@
 module Main #(
   parameter DIVIDER_LEN = 5000000,
-  parameter SCORE_W = 8, // such that 2**SCORE_W > SEQ_LENGTH
-  parameter DIGITS_N = 5,
-  parameter DIGITS_BCD_W = 4,
+  parameter SCORE_W = 10, // such that 2**SCORE_W > SEQ_LENGTH
+  parameter DIGITS_N = 9, // what is this supposed to be ???
+  parameter DIGITS_BCD_W = 4, // what is this supposed to be ???
   parameter OVERSAMPLING = 5,
+  parameter OVERSAMPLING_COUNTDOWN = 10,
   parameter SEQ_W = 100 // defines the length of the game --> SEQ_LENGTH * tick_slow = game_time
 )(
   input  logic        MAX10_CLK1_50,
@@ -39,19 +40,19 @@ module Main #(
   logic tick_slow;
   logic tick_countdown;
 
-  TickGen #(.DIVIDER(DIVIDER_LEN), .REG_W(24)) tick_fast_gen (
+  TickGen #(.DIVIDER(DIVIDER_LEN), .REG_W(32)) tick_fast_gen (
     .clk_i(clk),
     .reset_i(reset),
     .tick_o(tick_fast)
   );
 
-  TickGen #(.DIVIDER(OVERSAMPLING*DIVIDER_LEN), .REG_W(24)) tick_slow_gen (
+  TickGen #(.DIVIDER(OVERSAMPLING*DIVIDER_LEN), .REG_W(32)) tick_slow_gen (
     .clk_i(clk),
     .reset_i(reset),
     .tick_o(tick_slow)
   );
 
-  TickGen #(.DIVIDER(10*DIVIDER_LEN), .REG_W(24)) tick_countdown_gen (
+  TickGen #(.DIVIDER(OVERSAMPLING_COUNTDOWN*DIVIDER_LEN), .REG_W(32)) tick_countdown_gen (
     .clk_i(clk),
     .reset_i(reset),
     .tick_o(tick_countdown)
@@ -92,7 +93,7 @@ module Main #(
 
   logic [SCORE_W-1:0] score;
   logic [DIGITS_N-1:0][3:0] bcd;
-  logic [1:0] countdown_value; // good states are always 00,01,10, but 11 is too much
+  logic [SCORE_W-1:0] countdown_value; // good states are always 00,01,10, but 11 is too much
   logic enable_countdown;
 
   logic [6:0] digit0_value;
