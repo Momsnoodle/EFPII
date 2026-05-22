@@ -11,7 +11,7 @@ module Main #(
   input  logic [1:0]  KEY,
   output logic [9:0]  LEDR,
   input  logic [9:0]  SW,
-  output logic [7:0]  HEX0_COUNTDOWN,
+  output logic [7:0]  HEX5,
   output logic [7:0]  HEX0,
   output logic [7:0]  HEX1,
   output logic [7:0]  HEX2,
@@ -127,7 +127,7 @@ BinBCD #(
   );
 
 
-  SevenSegment digit0_countdown(bcd_countdown[0], HEX0_COUNTDOWN[6:0]);
+  SevenSegment digit0_countdown(bcd_countdown[0], HEX5[6:0]);
   assign HEX0[7] = 1'b1;
 
   SevenSegment digit0(bcd_score[0], HEX0[6:0]);
