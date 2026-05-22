@@ -12,41 +12,16 @@ module Oneshot(
     output logic pulse_o
   );
   
-  //Your code comes here
-  logic state_q;
-  logic state_d;
-  logic state_dd;
-
-
-  always @(posedge clk_i) begin
-    if (reset_i) begin
-      state_q <= 0;
-    end else begin
-      state_q <= in_i ? 1 : 0; // If in_i is 1, move to state 1; otherwise, stay in state 0
+  logic [2:0] sync_reg_q;
+  always_ff @(posedge clk_i) begin
+    if (reset_i)
+      sync_reg_q <= 3'b000;
+    else begin
+      sync_reg_q[2] <= in_i;            // FF1 (metastability possible)
+      sync_reg_q[1] <= sync_reg_q[2];   // FF2 (synchronizer)
+      sync_reg_q[0] <= sync_reg_q[1];   // FF3 (edge detection delay)
     end
   end
   
-  always @(posedge clk_i) begin
-    if (reset_i) begin
-      state_d <= 0;
-    end else begin
-      state_d <= state_q ? 1 : 0; // If in_i is 1, move to state 1; otherwise, stay in state 0
-    end
-  end
-
-  always @(posedge clk_i) begin
-    if (reset_i) begin
-      state_dd <= 0;
-    end else begin
-      state_dd <= state_d ? 1 : 0; // If in_i is 1, move to state 1; otherwise, stay in state 0
-    end
-  end
-
-  always_comb begin
-    pulse_o = state_d && !state_dd; // Output is 1 when we transition from state 0 to state 1
-  end
-
+  assign pulse_o = sync_reg_q[1] & !sync_reg_q[0];
 endmodule
-
-
-
