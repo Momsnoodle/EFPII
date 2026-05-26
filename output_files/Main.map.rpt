@@ -1,0 +1,731 @@
+Analysis & Synthesis report for Main
+Tue May 26 21:29:49 2026
+Quartus Prime Version 22.1std.2 Build 922 07/20/2023 SC Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. State Machine - |Main|BinBCD:binBcd_countdown|state_q
+  9. State Machine - |Main|BinBCD:binBcd_score|state_q
+ 10. Registers Removed During Synthesis
+ 11. Removed Registers Triggering Further Register Optimizations
+ 12. General Register Statistics
+ 13. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 14. Parameter Settings for User Entity Instance: Top-level Entity: |Main
+ 15. Parameter Settings for User Entity Instance: TickGen:tick_fast_gen
+ 16. Parameter Settings for User Entity Instance: TickGen:tick_slow_gen
+ 17. Parameter Settings for User Entity Instance: TickGen:tick_countdown_gen
+ 18. Parameter Settings for User Entity Instance: Debouncer:BTN[0].db
+ 19. Parameter Settings for User Entity Instance: Debouncer:BTN[1].db
+ 20. Parameter Settings for User Entity Instance: BinBCD:binBcd_score
+ 21. Parameter Settings for User Entity Instance: BinBCD:binBcd_countdown
+ 22. Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine
+ 23. Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|LFSR_Sequence_Generator:lfsr_inst
+ 24. Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|Button_Sequence_Capture:button_capture_inst
+ 25. Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|Countdown:countdown_inst
+ 26. Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|LED_Sequence_Display:led_display_inst
+ 27. Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|Comparator:comparator_inst
+ 28. Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|ScoreAdder:adder_inst
+ 29. Port Connectivity Checks: "BinBCD:binBcd_countdown"
+ 30. Post-Synthesis Netlist Statistics for Top Partition
+ 31. Elapsed Time Per Partition
+ 32. Analysis & Synthesis Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2023  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+
+
+
++-------------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                        ;
++------------------------------------+------------------------------------------------+
+; Analysis & Synthesis Status        ; Successful - Tue May 26 21:29:49 2026          ;
+; Quartus Prime Version              ; 22.1std.2 Build 922 07/20/2023 SC Lite Edition ;
+; Revision Name                      ; Main                                           ;
+; Top-level Entity Name              ; Main                                           ;
+; Family                             ; MAX 10                                         ;
+; Total logic elements               ; 992                                            ;
+;     Total combinational functions  ; 992                                            ;
+;     Dedicated logic registers      ; 552                                            ;
+; Total registers                    ; 552                                            ;
+; Total pins                         ; 71                                             ;
+; Total virtual pins                 ; 0                                              ;
+; Total memory bits                  ; 0                                              ;
+; Embedded Multiplier 9-bit elements ; 0                                              ;
+; Total PLLs                         ; 0                                              ;
+; UFM blocks                         ; 0                                              ;
+; ADC blocks                         ; 0                                              ;
++------------------------------------+------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                              ;
++------------------------------------------------------------------+--------------------+--------------------+
+; Option                                                           ; Setting            ; Default Value      ;
++------------------------------------------------------------------+--------------------+--------------------+
+; Device                                                           ; 10M08DAF484C8G     ;                    ;
+; Top-level entity name                                            ; Main               ; Main               ;
+; Family name                                                      ; MAX 10             ; Cyclone V          ;
+; Use smart compilation                                            ; Off                ; Off                ;
+; Enable parallel Assembler and Timing Analyzer during compilation ; On                 ; On                 ;
+; Enable compact report table                                      ; Off                ; Off                ;
+; Restructure Multiplexers                                         ; Auto               ; Auto               ;
+; Create Debugging Nodes for IP Cores                              ; Off                ; Off                ;
+; Preserve fewer node names                                        ; On                 ; On                 ;
+; Intel FPGA IP Evaluation Mode                                    ; Enable             ; Enable             ;
+; Verilog Version                                                  ; Verilog_2001       ; Verilog_2001       ;
+; VHDL Version                                                     ; VHDL_1993          ; VHDL_1993          ;
+; State Machine Processing                                         ; Auto               ; Auto               ;
+; Safe State Machine                                               ; Off                ; Off                ;
+; Extract Verilog State Machines                                   ; On                 ; On                 ;
+; Extract VHDL State Machines                                      ; On                 ; On                 ;
+; Ignore Verilog initial constructs                                ; Off                ; Off                ;
+; Iteration limit for constant Verilog loops                       ; 5000               ; 5000               ;
+; Iteration limit for non-constant Verilog loops                   ; 250                ; 250                ;
+; Add Pass-Through Logic to Inferred RAMs                          ; On                 ; On                 ;
+; Infer RAMs from Raw Logic                                        ; On                 ; On                 ;
+; Parallel Synthesis                                               ; On                 ; On                 ;
+; DSP Block Balancing                                              ; Auto               ; Auto               ;
+; NOT Gate Push-Back                                               ; On                 ; On                 ;
+; Power-Up Don't Care                                              ; On                 ; On                 ;
+; Remove Redundant Logic Cells                                     ; Off                ; Off                ;
+; Remove Duplicate Registers                                       ; On                 ; On                 ;
+; Ignore CARRY Buffers                                             ; Off                ; Off                ;
+; Ignore CASCADE Buffers                                           ; Off                ; Off                ;
+; Ignore GLOBAL Buffers                                            ; Off                ; Off                ;
+; Ignore ROW GLOBAL Buffers                                        ; Off                ; Off                ;
+; Ignore LCELL Buffers                                             ; Off                ; Off                ;
+; Ignore SOFT Buffers                                              ; On                 ; On                 ;
+; Limit AHDL Integers to 32 Bits                                   ; Off                ; Off                ;
+; Optimization Technique                                           ; Balanced           ; Balanced           ;
+; Carry Chain Length                                               ; 70                 ; 70                 ;
+; Auto Carry Chains                                                ; On                 ; On                 ;
+; Auto Open-Drain Pins                                             ; On                 ; On                 ;
+; Perform WYSIWYG Primitive Resynthesis                            ; Off                ; Off                ;
+; Auto ROM Replacement                                             ; On                 ; On                 ;
+; Auto RAM Replacement                                             ; On                 ; On                 ;
+; Auto DSP Block Replacement                                       ; On                 ; On                 ;
+; Auto Shift Register Replacement                                  ; Auto               ; Auto               ;
+; Allow Shift Register Merging across Hierarchies                  ; Auto               ; Auto               ;
+; Auto Clock Enable Replacement                                    ; On                 ; On                 ;
+; Strict RAM Replacement                                           ; Off                ; Off                ;
+; Allow Synchronous Control Signals                                ; On                 ; On                 ;
+; Force Use of Synchronous Clear Signals                           ; Off                ; Off                ;
+; Auto RAM Block Balancing                                         ; On                 ; On                 ;
+; Auto RAM to Logic Cell Conversion                                ; Off                ; Off                ;
+; Auto Resource Sharing                                            ; Off                ; Off                ;
+; Allow Any RAM Size For Recognition                               ; Off                ; Off                ;
+; Allow Any ROM Size For Recognition                               ; Off                ; Off                ;
+; Allow Any Shift Register Size For Recognition                    ; Off                ; Off                ;
+; Use LogicLock Constraints during Resource Balancing              ; On                 ; On                 ;
+; Ignore translate_off and synthesis_off directives                ; Off                ; Off                ;
+; Timing-Driven Synthesis                                          ; On                 ; On                 ;
+; Report Parameter Settings                                        ; On                 ; On                 ;
+; Report Source Assignments                                        ; On                 ; On                 ;
+; Report Connectivity Checks                                       ; On                 ; On                 ;
+; Ignore Maximum Fan-Out Assignments                               ; Off                ; Off                ;
+; Synchronization Register Chain Length                            ; 2                  ; 2                  ;
+; Power Optimization During Synthesis                              ; Normal compilation ; Normal compilation ;
+; HDL message level                                                ; Level2             ; Level2             ;
+; Suppress Register Optimization Related Messages                  ; Off                ; Off                ;
+; Number of Removed Registers Reported in Synthesis Report         ; 5000               ; 5000               ;
+; Number of Swept Nodes Reported in Synthesis Report               ; 5000               ; 5000               ;
+; Number of Inverted Registers Reported in Synthesis Report        ; 100                ; 100                ;
+; Clock MUX Protection                                             ; On                 ; On                 ;
+; Auto Gated Clock Conversion                                      ; Off                ; Off                ;
+; Block Design Naming                                              ; Auto               ; Auto               ;
+; SDC constraint protection                                        ; Off                ; Off                ;
+; Synthesis Effort                                                 ; Auto               ; Auto               ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal     ; On                 ; On                 ;
+; Pre-Mapping Resynthesis Optimization                             ; Off                ; Off                ;
+; Analysis & Synthesis Message Level                               ; Medium             ; Medium             ;
+; Disable Register Merging Across Hierarchies                      ; Auto               ; Auto               ;
+; Resource Aware Inference For Block RAM                           ; On                 ; On                 ;
++------------------------------------------------------------------+--------------------+--------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 8           ;
+; Maximum allowed            ; 8           ;
+;                            ;             ;
+; Average used               ; 1.01        ;
+; Maximum used               ; 8           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
+;     Processor 2            ;   0.2%      ;
+;     Processor 3            ;   0.1%      ;
+;     Processor 4            ;   0.1%      ;
+;     Processor 5            ;   0.1%      ;
+;     Processor 6            ;   0.1%      ;
+;     Processor 7            ;   0.1%      ;
+;     Processor 8            ;   0.1%      ;
++----------------------------+-------------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                          ;
++----------------------------------+-----------------+------------------------------+-----------------------------------+---------+
+; File Name with User-Entered Path ; Used in Netlist ; File Type                    ; File Name with Absolute Path      ; Library ;
++----------------------------------+-----------------+------------------------------+-----------------------------------+---------+
+; TickGen.sv                       ; yes             ; User SystemVerilog HDL File  ; /build/TickGen.sv                 ;         ;
+; SevenSegment.sv                  ; yes             ; User SystemVerilog HDL File  ; /build/SevenSegment.sv            ;         ;
+; ScoreAdder.sv                    ; yes             ; User SystemVerilog HDL File  ; /build/ScoreAdder.sv              ;         ;
+; ResetGenerator.sv                ; yes             ; User SystemVerilog HDL File  ; /build/ResetGenerator.sv          ;         ;
+; Oneshot.sv                       ; yes             ; User SystemVerilog HDL File  ; /build/Oneshot.sv                 ;         ;
+; MemoryGameStateMachine.sv        ; yes             ; User SystemVerilog HDL File  ; /build/MemoryGameStateMachine.sv  ;         ;
+; Main.sv                          ; yes             ; User SystemVerilog HDL File  ; /build/Main.sv                    ;         ;
+; LFSR_Sequence_Generator.sv       ; yes             ; User SystemVerilog HDL File  ; /build/LFSR_Sequence_Generator.sv ;         ;
+; LED_Sequence_Display.sv          ; yes             ; User SystemVerilog HDL File  ; /build/LED_Sequence_Display.sv    ;         ;
+; Debouncer.sv                     ; yes             ; User SystemVerilog HDL File  ; /build/Debouncer.sv               ;         ;
+; Countdown.sv                     ; yes             ; User SystemVerilog HDL File  ; /build/Countdown.sv               ;         ;
+; Comparator.sv                    ; yes             ; User SystemVerilog HDL File  ; /build/Comparator.sv              ;         ;
+; Button_Sequence_Capture.sv       ; yes             ; User SystemVerilog HDL File  ; /build/Button_Sequence_Capture.sv ;         ;
+; BinBCD.sv                        ; yes             ; User SystemVerilog HDL File  ; /build/BinBCD.sv                  ;         ;
++----------------------------------+-----------------+------------------------------+-----------------------------------+---------+
+
+
++-------------------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary                       ;
++---------------------------------------------+---------------------+
+; Resource                                    ; Usage               ;
++---------------------------------------------+---------------------+
+; Estimated Total logic elements              ; 992                 ;
+;                                             ;                     ;
+; Total combinational functions               ; 992                 ;
+; Logic element usage by number of LUT inputs ;                     ;
+;     -- 4 input functions                    ; 270                 ;
+;     -- 3 input functions                    ; 345                 ;
+;     -- <=2 input functions                  ; 377                 ;
+;                                             ;                     ;
+; Logic elements by mode                      ;                     ;
+;     -- normal mode                          ; 754                 ;
+;     -- arithmetic mode                      ; 238                 ;
+;                                             ;                     ;
+; Total registers                             ; 552                 ;
+;     -- Dedicated logic registers            ; 552                 ;
+;     -- I/O registers                        ; 0                   ;
+;                                             ;                     ;
+; I/O pins                                    ; 71                  ;
+;                                             ;                     ;
+; Embedded Multiplier 9-bit elements          ; 0                   ;
+;                                             ;                     ;
+; Maximum fan-out node                        ; MAX10_CLK1_50~input ;
+; Maximum fan-out                             ; 552                 ;
+; Total fan-out                               ; 4604                ;
+; Average fan-out                             ; 2.73                ;
++---------------------------------------------+---------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                                                                                                                                                             ;
++-----------------------------------------------------+---------------------+---------------------------+-------------+------------+--------------+---------+-----------+------+--------------+------------+---------------------------------------------------------------------------------------------+-------------------------+--------------+
+; Compilation Hierarchy Node                          ; Combinational ALUTs ; Dedicated Logic Registers ; Memory Bits ; UFM Blocks ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; ADC blocks ; Full Hierarchy Name                                                                         ; Entity Name             ; Library Name ;
++-----------------------------------------------------+---------------------+---------------------------+-------------+------------+--------------+---------+-----------+------+--------------+------------+---------------------------------------------------------------------------------------------+-------------------------+--------------+
+; |Main                                               ; 992 (2)             ; 552 (0)                   ; 0           ; 0          ; 0            ; 0       ; 0         ; 71   ; 0            ; 0          ; |Main                                                                                       ; Main                    ; work         ;
+;    |BinBCD:binBcd_countdown|                        ; 44 (44)             ; 27 (27)                   ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|BinBCD:binBcd_countdown                                                               ; BinBCD                  ; work         ;
+;    |BinBCD:binBcd_score|                            ; 97 (97)             ; 59 (59)                   ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|BinBCD:binBcd_score                                                                   ; BinBCD                  ; work         ;
+;    |Debouncer:BTN[0].db|                            ; 58 (58)             ; 26 (26)                   ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|Debouncer:BTN[0].db                                                                   ; Debouncer               ; work         ;
+;    |Debouncer:BTN[1].db|                            ; 58 (58)             ; 26 (26)                   ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|Debouncer:BTN[1].db                                                                   ; Debouncer               ; work         ;
+;    |MemoryGameStateMachine:memoryStateMachine|      ; 589 (130)           ; 341 (110)                 ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|MemoryGameStateMachine:memoryStateMachine                                             ; MemoryGameStateMachine  ; work         ;
+;       |Button_Sequence_Capture:button_capture_inst| ; 112 (112)           ; 109 (109)                 ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|MemoryGameStateMachine:memoryStateMachine|Button_Sequence_Capture:button_capture_inst ; Button_Sequence_Capture ; work         ;
+;       |Comparator:comparator_inst|                  ; 103 (103)           ; 102 (102)                 ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|MemoryGameStateMachine:memoryStateMachine|Comparator:comparator_inst                  ; Comparator              ; work         ;
+;       |Countdown:countdown_inst|                    ; 10 (10)             ; 3 (3)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|MemoryGameStateMachine:memoryStateMachine|Countdown:countdown_inst                    ; Countdown               ; work         ;
+;       |LED_Sequence_Display:led_display_inst|       ; 15 (15)             ; 9 (9)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|MemoryGameStateMachine:memoryStateMachine|LED_Sequence_Display:led_display_inst       ; LED_Sequence_Display    ; work         ;
+;       |ScoreAdder:adder_inst|                       ; 219 (219)           ; 8 (8)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|MemoryGameStateMachine:memoryStateMachine|ScoreAdder:adder_inst                       ; ScoreAdder              ; work         ;
+;    |Oneshot:BTN[0].os|                              ; 4 (4)               ; 3 (3)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|Oneshot:BTN[0].os                                                                     ; Oneshot                 ; work         ;
+;    |Oneshot:BTN[1].os|                              ; 4 (4)               ; 3 (3)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|Oneshot:BTN[1].os                                                                     ; Oneshot                 ; work         ;
+;    |ResetGenerator:resetGenerator|                  ; 4 (4)               ; 3 (3)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|ResetGenerator:resetGenerator                                                         ; ResetGenerator          ; work         ;
+;    |SevenSegment:digit0_countdown|                  ; 7 (7)               ; 0 (0)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|SevenSegment:digit0_countdown                                                         ; SevenSegment            ; work         ;
+;    |SevenSegment:digit0|                            ; 7 (7)               ; 0 (0)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|SevenSegment:digit0                                                                   ; SevenSegment            ; work         ;
+;    |SevenSegment:digit1|                            ; 7 (7)               ; 0 (0)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|SevenSegment:digit1                                                                   ; SevenSegment            ; work         ;
+;    |SevenSegment:digit2|                            ; 7 (7)               ; 0 (0)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|SevenSegment:digit2                                                                   ; SevenSegment            ; work         ;
+;    |SevenSegment:digit3|                            ; 7 (7)               ; 0 (0)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|SevenSegment:digit3                                                                   ; SevenSegment            ; work         ;
+;    |SevenSegment:digit4|                            ; 7 (7)               ; 0 (0)                     ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|SevenSegment:digit4                                                                   ; SevenSegment            ; work         ;
+;    |TickGen:tick_countdown_gen|                     ; 44 (44)             ; 32 (32)                   ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|TickGen:tick_countdown_gen                                                            ; TickGen                 ; work         ;
+;    |TickGen:tick_fast_gen|                          ; 46 (46)             ; 32 (32)                   ; 0           ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0          ; |Main|TickGen:tick_fast_gen                                                                 ; TickGen                 ; work         ;
++-----------------------------------------------------+---------------------+---------------------------+-------------+------------+--------------+---------+-----------+------+--------------+------------+---------------------------------------------------------------------------------------------+-------------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
+Encoding Type:  One-Hot
++----------------------------------------------------------------------------------------------------+
+; State Machine - |Main|BinBCD:binBcd_countdown|state_q                                              ;
++------------------------+------------------------+-------------+---------------+--------------------+
+; Name                   ; state_q.WAIT_START_LOW ; state_q.ADD ; state_q.SHIFT ; state_q.WAIT_START ;
++------------------------+------------------------+-------------+---------------+--------------------+
+; state_q.WAIT_START     ; 0                      ; 0           ; 0             ; 0                  ;
+; state_q.SHIFT          ; 0                      ; 0           ; 1             ; 1                  ;
+; state_q.ADD            ; 0                      ; 1           ; 0             ; 1                  ;
+; state_q.WAIT_START_LOW ; 1                      ; 0           ; 0             ; 1                  ;
++------------------------+------------------------+-------------+---------------+--------------------+
+
+
+Encoding Type:  One-Hot
++----------------------------------------------------------------------------------------------------+
+; State Machine - |Main|BinBCD:binBcd_score|state_q                                                  ;
++------------------------+------------------------+-------------+---------------+--------------------+
+; Name                   ; state_q.WAIT_START_LOW ; state_q.ADD ; state_q.SHIFT ; state_q.WAIT_START ;
++------------------------+------------------------+-------------+---------------+--------------------+
+; state_q.WAIT_START     ; 0                      ; 0           ; 0             ; 0                  ;
+; state_q.SHIFT          ; 0                      ; 0           ; 1             ; 1                  ;
+; state_q.ADD            ; 0                      ; 1           ; 0             ; 1                  ;
+; state_q.WAIT_START_LOW ; 1                      ; 0           ; 0             ; 1                  ;
++------------------------+------------------------+-------------+---------------+--------------------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Registers Removed During Synthesis                                                                                                                                                                                  ;
++----------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------+
+; Register name                                                                                                              ; Reason for Removal                                                                     ;
++----------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------+
+; MemoryGameStateMachine:memoryStateMachine|LFSR_Sequence_Generator:lfsr_inst|sequence_o[0..18]                              ; Stuck at GND due to stuck port data_in                                                 ;
+; MemoryGameStateMachine:memoryStateMachine|LFSR_Sequence_Generator:lfsr_inst|bit_counter_q[0..7]                            ; Stuck at GND due to stuck port data_in                                                 ;
+; MemoryGameStateMachine:memoryStateMachine|LFSR_Sequence_Generator:lfsr_inst|sequence_o[19..99]                             ; Stuck at GND due to stuck port data_in                                                 ;
+; TickGen:tick_slow_gen|counter_q[0..31]                                                                                     ; Lost fanout                                                                            ;
+; MemoryGameStateMachine:memoryStateMachine|LFSR_Sequence_Generator:lfsr_inst|done_o                                         ; Stuck at GND due to stuck port data_in                                                 ;
+; MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[3,7,11,15,19,23,31,35,39,43,55,59,63,67,70,71,75,83,87,90,91]  ; Merged with MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[99]            ;
+; MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[6,8,10,12,14,16,18,20,22,24,26..29,58,60,62,64,66,68,69,86,88] ; Merged with MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[98]            ;
+; MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[30,32,34,36,38,40,42,44,46,49,53,72,74,76,78,81,92,94]         ; Merged with MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[97]            ;
+; MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[0,2,4,47,48,50,52,54,56,79,80,82,84,95]                        ; Merged with MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[96]            ;
+; MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[1,5,9,13,17,21,25,33,37,41,45,51,57,61,65,73,77,85,89]         ; Merged with MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[93]            ;
+; MemoryGameStateMachine:memoryStateMachine|ScoreAdder:adder_inst|score_o[9]                                                 ; Merged with MemoryGameStateMachine:memoryStateMachine|ScoreAdder:adder_inst|score_o[7] ;
+; MemoryGameStateMachine:memoryStateMachine|state_out.score[7]                                                               ; Merged with MemoryGameStateMachine:memoryStateMachine|state_out.score[9]               ;
+; MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[96,97]                                                         ; Merged with MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[99]            ;
+; MemoryGameStateMachine:memoryStateMachine|state_out.score[9]                                                               ; Merged with MemoryGameStateMachine:memoryStateMachine|state_out.score[8]               ;
+; MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[98,99]                                                         ; Merged with MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[93]            ;
+; MemoryGameStateMachine:memoryStateMachine|ScoreAdder:adder_inst|score_o[8]                                                 ; Merged with MemoryGameStateMachine:memoryStateMachine|ScoreAdder:adder_inst|score_o[7] ;
+; MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[93]                                                            ; Stuck at GND due to stuck port data_in                                                 ;
+; MemoryGameStateMachine:memoryStateMachine|ScoreAdder:adder_inst|score_o[7]                                                 ; Stuck at GND due to stuck port data_in                                                 ;
+; MemoryGameStateMachine:memoryStateMachine|state_out.score[8]                                                               ; Stuck at GND due to stuck port data_in                                                 ;
+; MemoryGameStateMachine:memoryStateMachine|LED_Sequence_Display:led_display_inst|led_o                                      ; Stuck at GND due to stuck port data_in                                                 ;
+; BinBCD:binBcd_countdown|state_q~2                                                                                          ; Lost fanout                                                                            ;
+; BinBCD:binBcd_countdown|state_q~3                                                                                          ; Lost fanout                                                                            ;
+; BinBCD:binBcd_score|state_q~2                                                                                              ; Lost fanout                                                                            ;
+; BinBCD:binBcd_score|state_q~3                                                                                              ; Lost fanout                                                                            ;
+; Total Number of Removed Registers = 252                                                                                    ;                                                                                        ;
++----------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Removed Registers Triggering Further Register Optimizations                                                                                                                                                      ;
++----------------------------------------------------------------------------------------------+---------------------------+---------------------------------------------------------------------------------------+
+; Register name                                                                                ; Reason for Removal        ; Registers Removed due to This Register                                                ;
++----------------------------------------------------------------------------------------------+---------------------------+---------------------------------------------------------------------------------------+
+; TickGen:tick_slow_gen|counter_q[11]                                                          ; Lost Fanouts              ; TickGen:tick_slow_gen|counter_q[20], TickGen:tick_slow_gen|counter_q[21],             ;
+;                                                                                              ;                           ; TickGen:tick_slow_gen|counter_q[22], TickGen:tick_slow_gen|counter_q[24]              ;
+; MemoryGameStateMachine:memoryStateMachine|LFSR_Sequence_Generator:lfsr_inst|bit_counter_q[7] ; Stuck at GND              ; TickGen:tick_slow_gen|counter_q[30], TickGen:tick_slow_gen|counter_q[31],             ;
+;                                                                                              ; due to stuck port data_in ; MemoryGameStateMachine:memoryStateMachine|LFSR_Sequence_Generator:lfsr_inst|done_o    ;
+; MemoryGameStateMachine:memoryStateMachine|LFSR_Sequence_Generator:lfsr_inst|sequence_o[93]   ; Stuck at GND              ; MemoryGameStateMachine:memoryStateMachine|state_out.seq_gen[93],                      ;
+;                                                                                              ; due to stuck port data_in ; MemoryGameStateMachine:memoryStateMachine|LED_Sequence_Display:led_display_inst|led_o ;
+; MemoryGameStateMachine:memoryStateMachine|ScoreAdder:adder_inst|score_o[7]                   ; Stuck at GND              ; MemoryGameStateMachine:memoryStateMachine|state_out.score[8]                          ;
+;                                                                                              ; due to stuck port data_in ;                                                                                       ;
++----------------------------------------------------------------------------------------------+---------------------------+---------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 552   ;
+; Number of registers using Synchronous Clear  ; 167   ;
+; Number of registers using Synchronous Load   ; 0     ;
+; Number of registers using Asynchronous Clear ; 0     ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 405   ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                                                                           ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                                                                 ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------------+
+; 3:1                ; 100 bits  ; 200 LEs       ; 100 LEs              ; 100 LEs                ; Yes        ; |Main|MemoryGameStateMachine:memoryStateMachine|state_out.seq_in[62]                                       ;
+; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |Main|MemoryGameStateMachine:memoryStateMachine|state_out.score[6]                                         ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |Main|BinBCD:binBcd_countdown|output_reg_q[3]                                                              ;
+; 3:1                ; 20 bits   ; 40 LEs        ; 20 LEs               ; 20 LEs                 ; Yes        ; |Main|BinBCD:binBcd_score|output_reg_q[7]                                                                  ;
+; 3:1                ; 108 bits  ; 216 LEs       ; 108 LEs              ; 108 LEs                ; Yes        ; |Main|MemoryGameStateMachine:memoryStateMachine|Button_Sequence_Capture:button_capture_inst|sequence_o[92] ;
+; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |Main|MemoryGameStateMachine:memoryStateMachine|ScoreAdder:adder_inst|score_o[0]                           ;
+; 3:1                ; 100 bits  ; 200 LEs       ; 100 LEs              ; 100 LEs                ; Yes        ; |Main|MemoryGameStateMachine:memoryStateMachine|Comparator:comparator_inst|result_o[51]                    ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |Main|MemoryGameStateMachine:memoryStateMachine|LED_Sequence_Display:led_display_inst|index_q[6]           ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; Yes        ; |Main|MemoryGameStateMachine:memoryStateMachine|Countdown:countdown_inst|counter_q[0]                      ;
+; 5:1                ; 8 bits    ; 24 LEs        ; 8 LEs                ; 16 LEs                 ; Yes        ; |Main|BinBCD:binBcd_countdown|scratch_q[7]                                                                 ;
+; 5:1                ; 5 bits    ; 15 LEs        ; 5 LEs                ; 10 LEs                 ; Yes        ; |Main|BinBCD:binBcd_countdown|bit_counter_q[3]                                                             ;
+; 5:1                ; 5 bits    ; 15 LEs        ; 5 LEs                ; 10 LEs                 ; Yes        ; |Main|BinBCD:binBcd_score|bit_counter_q[4]                                                                 ;
+; 5:1                ; 3 bits    ; 9 LEs         ; 3 LEs                ; 6 LEs                  ; Yes        ; |Main|BinBCD:binBcd_score|scratch_q[8]                                                                     ;
+; 5:1                ; 6 bits    ; 18 LEs        ; 12 LEs               ; 6 LEs                  ; Yes        ; |Main|BinBCD:binBcd_score|scratch_q[4]                                                                     ;
+; 7:1                ; 4 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |Main|BinBCD:binBcd_countdown|scratch_q[11]                                                                ;
+; 7:1                ; 4 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |Main|BinBCD:binBcd_score|scratch_q[13]                                                                    ;
+; 7:1                ; 4 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |Main|BinBCD:binBcd_score|scratch_q[17]                                                                    ;
+; 7:1                ; 4 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |Main|BinBCD:binBcd_score|scratch_q[21]                                                                    ;
+; 7:1                ; 4 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |Main|BinBCD:binBcd_score|scratch_q[22]                                                                    ;
+; 7:1                ; 4 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |Main|BinBCD:binBcd_score|scratch_q[29]                                                                    ;
+; 7:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |Main|BinBCD:binBcd_countdown|state_q                                                                      ;
+; 7:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |Main|BinBCD:binBcd_score|state_q                                                                          ;
+; 15:1               ; 2 bits    ; 20 LEs        ; 10 LEs               ; 10 LEs                 ; No         ; |Main|MemoryGameStateMachine:memoryStateMachine|Selector1                                                  ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Top-level Entity: |Main ;
++------------------------+---------+-----------------------------------+
+; Parameter Name         ; Value   ; Type                              ;
++------------------------+---------+-----------------------------------+
+; DIVIDER_LEN            ; 5000000 ; Signed Integer                    ;
+; SCORE_W                ; 10      ; Signed Integer                    ;
+; DIGITS_N               ; 5       ; Signed Integer                    ;
+; DIGITS_BCD_W           ; 4       ; Signed Integer                    ;
+; OVERSAMPLING           ; 5       ; Signed Integer                    ;
+; OVERSAMPLING_COUNTDOWN ; 10      ; Signed Integer                    ;
+; SEQ_W                  ; 100     ; Signed Integer                    ;
++------------------------+---------+-----------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: TickGen:tick_fast_gen ;
++----------------+---------+-----------------------------------------+
+; Parameter Name ; Value   ; Type                                    ;
++----------------+---------+-----------------------------------------+
+; DIVIDER        ; 5000000 ; Signed Integer                          ;
+; REG_W          ; 32      ; Signed Integer                          ;
++----------------+---------+-----------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: TickGen:tick_slow_gen ;
++----------------+----------+----------------------------------------+
+; Parameter Name ; Value    ; Type                                   ;
++----------------+----------+----------------------------------------+
+; DIVIDER        ; 25000000 ; Signed Integer                         ;
+; REG_W          ; 32       ; Signed Integer                         ;
++----------------+----------+----------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: TickGen:tick_countdown_gen ;
++----------------+----------+---------------------------------------------+
+; Parameter Name ; Value    ; Type                                        ;
++----------------+----------+---------------------------------------------+
+; DIVIDER        ; 50000000 ; Signed Integer                              ;
+; REG_W          ; 32       ; Signed Integer                              ;
++----------------+----------+---------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Debouncer:BTN[0].db ;
++----------------+---------+---------------------------------------+
+; Parameter Name ; Value   ; Type                                  ;
++----------------+---------+---------------------------------------+
+; COUNT_LEN      ; 5000000 ; Signed Integer                        ;
++----------------+---------+---------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Debouncer:BTN[1].db ;
++----------------+---------+---------------------------------------+
+; Parameter Name ; Value   ; Type                                  ;
++----------------+---------+---------------------------------------+
+; COUNT_LEN      ; 5000000 ; Signed Integer                        ;
++----------------+---------+---------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: BinBCD:binBcd_score ;
++----------------+-------+-----------------------------------------+
+; Parameter Name ; Value ; Type                                    ;
++----------------+-------+-----------------------------------------+
+; BINARY_W       ; 10    ; Signed Integer                          ;
+; DIGITS_N       ; 5     ; Signed Integer                          ;
+; DIGITS_BCD_W   ; 4     ; Signed Integer                          ;
++----------------+-------+-----------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: BinBCD:binBcd_countdown ;
++----------------+-------+---------------------------------------------+
+; Parameter Name ; Value ; Type                                        ;
++----------------+-------+---------------------------------------------+
+; BINARY_W       ; 10    ; Signed Integer                              ;
+; DIGITS_N       ; 5     ; Signed Integer                              ;
+; DIGITS_BCD_W   ; 4     ; Signed Integer                              ;
++----------------+-------+---------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine ;
++----------------+-------+---------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                          ;
++----------------+-------+---------------------------------------------------------------+
+; SCORE_W        ; 10    ; Signed Integer                                                ;
+; SEQ_W          ; 100   ; Signed Integer                                                ;
+; OVER_SAMPLING  ; 5     ; Signed Integer                                                ;
++----------------+-------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|LFSR_Sequence_Generator:lfsr_inst ;
++----------------+-------+-------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                            ;
++----------------+-------+-------------------------------------------------------------------------------------------------+
+; SEQ_LENGTH     ; 100   ; Signed Integer                                                                                  ;
+; LFSR_WIDTH     ; 16    ; Signed Integer                                                                                  ;
+; MULTIPLIER     ; 10    ; Signed Integer                                                                                  ;
++----------------+-------+-------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|Button_Sequence_Capture:button_capture_inst ;
++----------------+-------+-----------------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                      ;
++----------------+-------+-----------------------------------------------------------------------------------------------------------+
+; SEQ_LENGTH     ; 100   ; Signed Integer                                                                                            ;
++----------------+-------+-----------------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|Countdown:countdown_inst ;
++----------------+-------+----------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                   ;
++----------------+-------+----------------------------------------------------------------------------------------+
+; START_VALUE    ; 10    ; Unsigned Binary                                                                        ;
+; SCORE_W        ; 10    ; Signed Integer                                                                         ;
++----------------+-------+----------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|LED_Sequence_Display:led_display_inst ;
++----------------+-------+-----------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                ;
++----------------+-------+-----------------------------------------------------------------------------------------------------+
+; SEQ_LENGTH     ; 100   ; Signed Integer                                                                                      ;
++----------------+-------+-----------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|Comparator:comparator_inst ;
++----------------+-------+------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                     ;
++----------------+-------+------------------------------------------------------------------------------------------+
+; SEQ_LENGTH     ; 100   ; Signed Integer                                                                           ;
++----------------+-------+------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: MemoryGameStateMachine:memoryStateMachine|ScoreAdder:adder_inst ;
++----------------+-------+-------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                ;
++----------------+-------+-------------------------------------------------------------------------------------+
+; SEQ_LENGTH     ; 100   ; Signed Integer                                                                      ;
+; SCORE_W        ; 10    ; Signed Integer                                                                      ;
++----------------+-------+-------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "BinBCD:binBcd_countdown"                                                                   ;
++-------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port        ; Type   ; Severity ; Details                                                                             ;
++-------------+--------+----------+-------------------------------------------------------------------------------------+
+; bcd_o[4..1] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++-------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-----------------------------------------------------+
+; Post-Synthesis Netlist Statistics for Top Partition ;
++-----------------------+-----------------------------+
+; Type                  ; Count                       ;
++-----------------------+-----------------------------+
+; boundary_port         ; 71                          ;
+; cycloneiii_ff         ; 552                         ;
+;     ENA               ; 360                         ;
+;     ENA SCLR          ; 45                          ;
+;     SCLR              ; 122                         ;
+;     plain             ; 25                          ;
+; cycloneiii_lcell_comb ; 1000                        ;
+;     arith             ; 238                         ;
+;         2 data inputs ; 150                         ;
+;         3 data inputs ; 88                          ;
+;     normal            ; 762                         ;
+;         0 data inputs ; 23                          ;
+;         1 data inputs ; 18                          ;
+;         2 data inputs ; 194                         ;
+;         3 data inputs ; 257                         ;
+;         4 data inputs ; 270                         ;
+;                       ;                             ;
+; Max LUT depth         ; 11.50                       ;
+; Average LUT depth     ; 4.44                        ;
++-----------------------+-----------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:01     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Synthesis
+    Info: Version 22.1std.2 Build 922 07/20/2023 SC Lite Edition
+    Info: Processing started: Tue May 26 21:29:37 2026
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off Main -c Main
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 8 of the 8 processors detected
+Info (12021): Found 1 design units, including 1 entities, in source file TickGen.sv
+    Info (12023): Found entity 1: TickGen File: /build/TickGen.sv Line: 4
+Info (12021): Found 1 design units, including 1 entities, in source file SevenSegment.sv
+    Info (12023): Found entity 1: SevenSegment File: /build/SevenSegment.sv Line: 9
+Info (12021): Found 5 design units, including 5 entities, in source file ScoreAdder.sv
+    Info (12023): Found entity 1: ScoreAdder File: /build/ScoreAdder.sv Line: 1
+    Info (12023): Found entity 2: ScoreAdder_COMB File: /build/ScoreAdder.sv Line: 56
+    Info (12023): Found entity 3: ScoreAdder_OOOOLD File: /build/ScoreAdder.sv Line: 91
+    Info (12023): Found entity 4: ScoreAdder_old1 File: /build/ScoreAdder.sv Line: 120
+    Info (12023): Found entity 5: ScoreAdder_old File: /build/ScoreAdder.sv Line: 163
+Info (12021): Found 1 design units, including 1 entities, in source file ResetGenerator.sv
+    Info (12023): Found entity 1: ResetGenerator File: /build/ResetGenerator.sv Line: 5
+Info (12021): Found 1 design units, including 1 entities, in source file Oneshot.sv
+    Info (12023): Found entity 1: Oneshot File: /build/Oneshot.sv Line: 8
+Info (12021): Found 1 design units, including 1 entities, in source file MemoryGameStateMachine.sv
+    Info (12023): Found entity 1: MemoryGameStateMachine File: /build/MemoryGameStateMachine.sv Line: 2
+Info (12021): Found 1 design units, including 1 entities, in source file Main.sv
+    Info (12023): Found entity 1: Main File: /build/Main.sv Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file LFSR_Sequence_Generator.sv
+    Info (12023): Found entity 1: LFSR_Sequence_Generator File: /build/LFSR_Sequence_Generator.sv Line: 2
+Info (12021): Found 1 design units, including 1 entities, in source file LED_Sequence_Display.sv
+    Info (12023): Found entity 1: LED_Sequence_Display File: /build/LED_Sequence_Display.sv Line: 1
+Warning (12019): Can't analyze file -- file Display_Score.sv is missing
+Info (12021): Found 1 design units, including 1 entities, in source file Debouncer.sv
+    Info (12023): Found entity 1: Debouncer File: /build/Debouncer.sv Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file Countdown.sv
+    Info (12023): Found entity 1: Countdown File: /build/Countdown.sv Line: 1
+Info (12021): Found 3 design units, including 3 entities, in source file Comparator.sv
+    Info (12023): Found entity 1: Comparator_immediate File: /build/Comparator.sv Line: 3
+    Info (12023): Found entity 2: Comparator_other File: /build/Comparator.sv Line: 20
+    Info (12023): Found entity 3: Comparator File: /build/Comparator.sv Line: 49
+Info (12021): Found 2 design units, including 2 entities, in source file Button_Sequence_Capture.sv
+    Info (12023): Found entity 1: Button_Input File: /build/Button_Sequence_Capture.sv Line: 1
+    Info (12023): Found entity 2: Button_Sequence_Capture File: /build/Button_Sequence_Capture.sv Line: 87
+Info (12021): Found 1 design units, including 1 entities, in source file BinBCD.sv
+    Info (12023): Found entity 1: BinBCD File: /build/BinBCD.sv Line: 1
+Info (12127): Elaborating entity "Main" for the top level hierarchy
+Warning (10034): Output port "LEDR[9..1]" at Main.sv(12) has no driver File: /build/Main.sv Line: 12
+Warning (10034): Output port "HEX5[7]" at Main.sv(14) has no driver File: /build/Main.sv Line: 14
+Info (12128): Elaborating entity "ResetGenerator" for hierarchy "ResetGenerator:resetGenerator" File: /build/Main.sv Line: 34
+Warning (10230): Verilog HDL assignment warning at ResetGenerator.sv(17): truncated value with size 32 to match size of target (3) File: /build/ResetGenerator.sv Line: 17
+Info (12128): Elaborating entity "TickGen" for hierarchy "TickGen:tick_fast_gen" File: /build/Main.sv Line: 48
+Info (12128): Elaborating entity "TickGen" for hierarchy "TickGen:tick_slow_gen" File: /build/Main.sv Line: 54
+Info (12128): Elaborating entity "TickGen" for hierarchy "TickGen:tick_countdown_gen" File: /build/Main.sv Line: 60
+Info (12128): Elaborating entity "Debouncer" for hierarchy "Debouncer:BTN[0].db" File: /build/Main.sv Line: 79
+Warning (10230): Verilog HDL assignment warning at Debouncer.sv(38): truncated value with size 32 to match size of target (24) File: /build/Debouncer.sv Line: 38
+Warning (10230): Verilog HDL assignment warning at Debouncer.sv(50): truncated value with size 32 to match size of target (24) File: /build/Debouncer.sv Line: 50
+Info (12128): Elaborating entity "Oneshot" for hierarchy "Oneshot:BTN[0].os" File: /build/Main.sv Line: 86
+Info (12128): Elaborating entity "BinBCD" for hierarchy "BinBCD:binBcd_score" File: /build/Main.sv Line: 113
+Warning (10230): Verilog HDL assignment warning at BinBCD.sv(68): truncated value with size 32 to match size of target (5) File: /build/BinBCD.sv Line: 68
+Warning (10230): Verilog HDL assignment warning at BinBCD.sv(108): truncated value with size 32 to match size of target (4) File: /build/BinBCD.sv Line: 108
+Info (12128): Elaborating entity "SevenSegment" for hierarchy "SevenSegment:digit0_countdown" File: /build/Main.sv Line: 130
+Info (12128): Elaborating entity "MemoryGameStateMachine" for hierarchy "MemoryGameStateMachine:memoryStateMachine" File: /build/Main.sv Line: 179
+Info (12128): Elaborating entity "LFSR_Sequence_Generator" for hierarchy "MemoryGameStateMachine:memoryStateMachine|LFSR_Sequence_Generator:lfsr_inst" File: /build/MemoryGameStateMachine.sv Line: 94
+Warning (10036): Verilog HDL or VHDL warning at LFSR_Sequence_Generator.sv(29): object "feedback" assigned a value but never read File: /build/LFSR_Sequence_Generator.sv Line: 29
+Warning (10230): Verilog HDL assignment warning at LFSR_Sequence_Generator.sv(82): truncated value with size 32 to match size of target (4) File: /build/LFSR_Sequence_Generator.sv Line: 82
+Info (12128): Elaborating entity "Button_Sequence_Capture" for hierarchy "MemoryGameStateMachine:memoryStateMachine|Button_Sequence_Capture:button_capture_inst" File: /build/MemoryGameStateMachine.sv Line: 110
+Warning (10230): Verilog HDL assignment warning at Button_Sequence_Capture.sv(144): truncated value with size 32 to match size of target (8) File: /build/Button_Sequence_Capture.sv Line: 144
+Info (12128): Elaborating entity "Countdown" for hierarchy "MemoryGameStateMachine:memoryStateMachine|Countdown:countdown_inst" File: /build/MemoryGameStateMachine.sv Line: 126
+Warning (10230): Verilog HDL assignment warning at Countdown.sv(39): truncated value with size 32 to match size of target (2) File: /build/Countdown.sv Line: 39
+Info (12128): Elaborating entity "LED_Sequence_Display" for hierarchy "MemoryGameStateMachine:memoryStateMachine|LED_Sequence_Display:led_display_inst" File: /build/MemoryGameStateMachine.sv Line: 142
+Warning (10230): Verilog HDL assignment warning at LED_Sequence_Display.sv(63): truncated value with size 32 to match size of target (8) File: /build/LED_Sequence_Display.sv Line: 63
+Info (12128): Elaborating entity "Comparator" for hierarchy "MemoryGameStateMachine:memoryStateMachine|Comparator:comparator_inst" File: /build/MemoryGameStateMachine.sv Line: 158
+Info (12128): Elaborating entity "ScoreAdder" for hierarchy "MemoryGameStateMachine:memoryStateMachine|ScoreAdder:adder_inst" File: /build/MemoryGameStateMachine.sv Line: 172
+Warning (13024): Output pins are stuck at VCC or GND
+    Warning (13410): Pin "LEDR[0]" is stuck at GND File: /build/Main.sv Line: 12
+    Warning (13410): Pin "LEDR[1]" is stuck at GND File: /build/Main.sv Line: 12
+    Warning (13410): Pin "LEDR[2]" is stuck at GND File: /build/Main.sv Line: 12
+    Warning (13410): Pin "LEDR[3]" is stuck at GND File: /build/Main.sv Line: 12
+    Warning (13410): Pin "LEDR[4]" is stuck at GND File: /build/Main.sv Line: 12
+    Warning (13410): Pin "LEDR[5]" is stuck at GND File: /build/Main.sv Line: 12
+    Warning (13410): Pin "LEDR[6]" is stuck at GND File: /build/Main.sv Line: 12
+    Warning (13410): Pin "LEDR[7]" is stuck at GND File: /build/Main.sv Line: 12
+    Warning (13410): Pin "LEDR[8]" is stuck at GND File: /build/Main.sv Line: 12
+    Warning (13410): Pin "LEDR[9]" is stuck at GND File: /build/Main.sv Line: 12
+    Warning (13410): Pin "HEX5[7]" is stuck at GND File: /build/Main.sv Line: 14
+    Warning (13410): Pin "HEX0[7]" is stuck at VCC File: /build/Main.sv Line: 15
+    Warning (13410): Pin "HEX1[7]" is stuck at VCC File: /build/Main.sv Line: 16
+    Warning (13410): Pin "HEX2[7]" is stuck at GND File: /build/Main.sv Line: 17
+    Warning (13410): Pin "HEX3[7]" is stuck at VCC File: /build/Main.sv Line: 18
+    Warning (13410): Pin "HEX4[7]" is stuck at VCC File: /build/Main.sv Line: 20
+Info (286030): Timing-Driven Synthesis is running
+Info (17049): 36 registers lost all their fanouts during netlist optimizations.
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Warning (21074): Design contains 10 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "SW[0]" File: /build/Main.sv Line: 13
+    Warning (15610): No output dependent on input pin "SW[1]" File: /build/Main.sv Line: 13
+    Warning (15610): No output dependent on input pin "SW[2]" File: /build/Main.sv Line: 13
+    Warning (15610): No output dependent on input pin "SW[3]" File: /build/Main.sv Line: 13
+    Warning (15610): No output dependent on input pin "SW[4]" File: /build/Main.sv Line: 13
+    Warning (15610): No output dependent on input pin "SW[5]" File: /build/Main.sv Line: 13
+    Warning (15610): No output dependent on input pin "SW[6]" File: /build/Main.sv Line: 13
+    Warning (15610): No output dependent on input pin "SW[7]" File: /build/Main.sv Line: 13
+    Warning (15610): No output dependent on input pin "SW[8]" File: /build/Main.sv Line: 13
+    Warning (15610): No output dependent on input pin "SW[9]" File: /build/Main.sv Line: 13
+Info (21057): Implemented 1063 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 13 input pins
+    Info (21059): Implemented 58 output pins
+    Info (21061): Implemented 992 logic cells
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 42 warnings
+    Info: Peak virtual memory: 821 megabytes
+    Info: Processing ended: Tue May 26 21:29:49 2026
+    Info: Elapsed time: 00:00:12
+    Info: Total CPU time (on all processors): 00:00:20
+
+

@@ -42,7 +42,7 @@ set_global_assignment -name DEVICE 10M08DAF484C8G
 set_global_assignment -name TOP_LEVEL_ENTITY Main
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 25.1STD.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "13:00:56  MAY 22, 2026"
-set_global_assignment -name LAST_QUARTUS_VERSION "25.1std.0 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "22.1std.2 Lite Edition"
 set_global_assignment -name SYSTEMVERILOG_FILE TickGen.sv
 set_global_assignment -name SYSTEMVERILOG_FILE SevenSegment.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ScoreAdder.sv

@@ -1,0 +1,14 @@
+
+State Machine - |Main|BinBCD:binBcd_countdown|state_q
+Name state_q.WAIT_START_LOW state_q.ADD state_q.SHIFT state_q.WAIT_START 
+state_q.WAIT_START 0 0 0 0 
+state_q.SHIFT 0 0 1 1 
+state_q.ADD 0 1 0 1 
+state_q.WAIT_START_LOW 1 0 0 1 
+
+State Machine - |Main|BinBCD:binBcd_score|state_q
+Name state_q.WAIT_START_LOW state_q.ADD state_q.SHIFT state_q.WAIT_START 
+state_q.WAIT_START 0 0 0 0 
+state_q.SHIFT 0 0 1 1 
+state_q.ADD 0 1 0 1 
+state_q.WAIT_START_LOW 1 0 0 1 
