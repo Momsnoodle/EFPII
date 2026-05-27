@@ -83,7 +83,8 @@ module MemoryGameStateMachine #(
 
     LFSR_Sequence_Generator #(
         .SEQ_LENGTH(SEQ_W),
-        .LFSR_WIDTH(16)
+        .LFSR_WIDTH(16),
+        .MULTIPLIER(OVER_SAMPLING)
     ) lfsr_inst (
         .clk_i(clk_i),
         .rst_i(reset_or_begin_i),
@@ -240,9 +241,9 @@ module MemoryGameStateMachine #(
                 state_in.state = IDLE;
            end
            else if (player_done) begin
+                state_in.seq_in = player_sequence; // latch the final player sequence only when done
                 state_in.state = SCORING;
            end
-           state_in.seq_in = player_sequence; // fill the generated sequence into the packed state
 
         end
 

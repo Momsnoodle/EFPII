@@ -14,7 +14,7 @@ module ResetGenerator (
   
   always_ff @(posedge clk_i) begin
     if (counter < 3'b111)
-      counter <= counter + 1;
+      counter <= counter + 3'b001;
   end
 
   assign reset_o = counter != 3'b111;
