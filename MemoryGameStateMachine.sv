@@ -4,25 +4,18 @@ module MemoryGameStateMachine #(
     parameter SEQ_W = 100,
     parameter OVER_SAMPLING = 10
 )(
-    input logic clk_i,
-
-    input logic reset_or_begin_i,
-    input logic button_i,
-
-    input logic tick_fast,
-    input logic tick_slow,
-    input logic tick_countdown,
-   
-
-    //output logic [6:0] display0_o,
-    //output logic [6:0] display1_o,
-    //output logic [6:0] display2_o,
-    //output logic [6:0] display3_o,
-
-    output logic led_o,
-    output logic unsigned [SCORE_W-1:0] score,
-    output logic unsigned [SCORE_W-1:0] countdown_value,
-    output logic start_countdown
+    input  logic               clk_i,
+    input  logic               system_rst_n_i, // NEW: Active-low global reset 
+    input  logic               game_start_i,   // NEW: Clean edge pulse to start game
+    input  logic               button_i,
+    input  logic               tick_fast,
+    input  logic               tick_slow,
+    input  logic               tick_countdown,
+    output logic               led_o,
+    output logic [SCORE_W-1:0] score,
+    output logic [SCORE_W-1:0] countdown_value,
+    output logic               start_countdown,
+    output logic [2:0]         state_number_o
 
 );
 
@@ -30,24 +23,31 @@ module MemoryGameStateMachine #(
     // STATE MACHINE
     // =========================================================
 
-    typedef enum logic [2:0] { // initialize 6 states, need 3 bits
+   // =========================================================
+    // STATE MACHINE TYPE DEFINITIONS
+    // =========================================================
+    typedef enum logic [2:0] { 
         IDLE,
+        PRE_COUNTDOWN,  // New: 3, 2, 1 before the sequence shows
         GENERATION,
         DISPLAY,
-        COUNTDOWN,
+        POST_COUNTDOWN, // New: 5, 4, 3, 2, 1 during player input
         PLAYING,
         SCORING,
         ENDGAME
     } state_e;
 
-    typedef struct packed { // make a packed state variable with the logic states, the score and the seqences (stored in registers then)
+    typedef struct packed { 
         state_e state;
         logic [SCORE_W-1:0] score;
         logic [SEQ_W-1:0] seq_gen;
         logic [SEQ_W-1:0] seq_in;
     } state_t;
 
-    state_t state_out, state_in; // same as state_q, state_d convention
+    state_t state_out, state_in;
+    
+    // Internal signal to pass the starting count dynamically
+    logic [SCORE_W-1:0] countdown_start_value;
 
     // =========================================================
     // INTERNAL SIGNALS
@@ -72,7 +72,8 @@ module MemoryGameStateMachine #(
     logic score_done;
 
 
-    assign start_countdown = (state_out.state == COUNTDOWN); //1 if COUNTDOWN, 0 ELSE
+    // NEW CORRECTED LINE
+    assign start_countdown = (state_out.state == PRE_COUNTDOWN || state_out.state == POST_COUNTDOWN);
     
 
     // Instantiate the modules with the proper input 
@@ -87,7 +88,7 @@ module MemoryGameStateMachine #(
         .MULTIPLIER(OVER_SAMPLING)
     ) lfsr_inst (
         .clk_i(clk_i),
-        .rst_i(reset_or_begin_i),
+        .rst_i(!system_rst_n_i),
         .tick_i(tick_slow),
         .enable_i(state_out.state == GENERATION),
         .sequence_o(generated_sequence),
@@ -102,7 +103,7 @@ module MemoryGameStateMachine #(
         .SEQ_LENGTH(SEQ_W)
     ) button_capture_inst (
         .clk_i(clk_i),
-        .rst_i(reset_or_begin_i),
+        .rst_i(!system_rst_n_i),
         .tick_i(tick_fast),
         .enable_i(state_out.state == PLAYING),
         .button_i(button_i),
@@ -114,15 +115,16 @@ module MemoryGameStateMachine #(
     // COUNTDOWN, displays a countdown 3...2...1... before the display and the player input
     // =========================================================
 
+    // Countdown Module with dynamic start value input
     Countdown #(
-        .START_VALUE(2'b10),
         .SCORE_W(SCORE_W)
     ) countdown_inst (
         .clk_i(clk_i),
-        .rst_i(reset_or_begin_i),
-        .start_i(start_countdown),
+        .rst_i(!system_rst_n_i),
+        .start_i(start_countdown), 
+        .start_value_i(countdown_start_value), // Dynamic input (3 or 5)
         .tick_i(tick_countdown),
-        .value_o(countdown_out), // the current countdown value
+        .value_o(countdown_out), 
         .done_o(countdown_done)
     );
 
@@ -134,7 +136,7 @@ module MemoryGameStateMachine #(
         .SEQ_LENGTH(SEQ_W)
     ) led_display_inst (
         .clk_i(clk_i),
-        .rst_i(reset_or_begin_i),
+        .rst_i(!system_rst_n_i),
         .tick_i(tick_fast),
         .enable_i(state_out.state == DISPLAY),
         .sequence_i(state_out.seq_gen),
@@ -150,7 +152,7 @@ module MemoryGameStateMachine #(
         .SEQ_LENGTH(SEQ_W)
     ) comparator_inst (
         .clk_i(clk_i),
-        .rst_i(reset_or_begin_i),
+        .rst_i(!system_rst_n_i),
         .enable_i(state_out.state == SCORING),
         .seq_a_i(state_out.seq_gen),
         .seq_b_i(state_out.seq_in),
@@ -165,117 +167,93 @@ module MemoryGameStateMachine #(
     .SCORE_W(SCORE_W)
     ) adder_inst (
     .clk_i(clk_i),
-    .rst_i(reset_or_begin_i),
+    .rst_i(!system_rst_n_i),
     .compare_i(num_correct),
     .enable_i(state_out.state == SCORING && compare_done),
     .score_o(calculated_score),
     .done_o(score_done)
     );
 
+
     always_ff @(posedge clk_i) begin
-
-        if (reset_or_begin_i && state_in.state != IDLE) begin //set all things to 0 
-            state_out.state   <= IDLE;
-            state_out.score   <= '0;
+        if (!system_rst_n_i) begin // If reset goes low, force FSM back to IDLE
+            state_out.state <= IDLE;
+            state_out.score <= '0;
             state_out.seq_gen <= '0;
-            state_out.seq_in  <= '0;
-            
-
-            ///SHOULD DO THIS INSIDE OF THE SUBMODULES!!! --> BY SENDING THE RESET
-            //player_done <= '0;
-            //display_done <= '0;
-            //compare_done <= '0;
-            //score_done <= '0;
-            //calculated_score <= '0;
-        end
-        else begin
+            state_out.seq_in <= '0;
+        end else begin
             state_out <= state_in;
         end
-        end
+    end
 
     always_comb begin
-
-        // defaults
+        // Default assignments
         state_in = state_out;
+        countdown_start_value = '0; 
 
         case (state_out.state)
 
-        IDLE: begin
-            if (reset_or_begin_i)begin // start the game
-                state_in.state = GENERATION;
+            IDLE: begin
+                if (game_start_i) begin // Use the new dedicated game start trigger
+                    state_in.state = PRE_COUNTDOWN; // Or GENERATION depending on your FSM setup
+                end
             end
-        end
+            
+            PRE_COUNTDOWN: begin
+                countdown_start_value = 'd3; // Set initial countdown to 3 seconds
+                if (countdown_done) begin
+                    state_in.state = GENERATION;
+                end
+            end
+            
+            GENERATION: begin
+                state_in.seq_gen = generated_sequence; 
+                if (seq_done) begin
+                    state_in.state = DISPLAY;
+                end
+            end
+           
+            DISPLAY: begin 
+                if (display_done) begin
+                    state_in.state = POST_COUNTDOWN; // Go to the 5s input countdown
+                end
+            end
 
+            POST_COUNTDOWN: begin
+                countdown_start_value = 'd5; // Set player input countdown to 5 seconds
+                if (countdown_done) begin
+                    // If 5 seconds run out before player completes input, force end game/scoring
+                    state_in.state = SCORING; 
+                end else if (player_done) begin
+                    state_in.state  = SCORING;
+                    state_in.seq_in = player_sequence;
+                end
+            end
+
+            SCORING: begin
+                if (score_done) begin
+                    state_in.state = ENDGAME;
+                end
+                state_in.score = calculated_score;
+            end
+
+            ENDGAME: begin
+                if (game_start_i) begin
+                    state_in.state = IDLE;
+                end
+            end
         
-        GENERATION: begin
-            state_in.seq_gen = generated_sequence; //always running will be random therefore 
-            if (seq_done) begin
-                state_in.state = DISPLAY;
-            end
-        end
-
-       
-        DISPLAY: begin // will already start the display since the enable signal of the LED_Sequence_Display is on
-             if (reset_or_begin_i) begin
-                state_in.state = IDLE;
-             end
-            else if (display_done) begin
-                state_in.state = COUNTDOWN;
-            end
-        end
-
-        COUNTDOWN: begin
-            if (reset_or_begin_i) begin
+            default: begin
                 state_in.state = IDLE;
             end
-            
-            else if (countdown_done) begin
-                state_in.state = PLAYING;
-            end
-
-        end
-
-        
-        PLAYING: begin // will turn on enable_i of Button_Sequence_Capture
-           if (reset_or_begin_i) begin
-                state_in.state = IDLE;
-           end
-           else if (player_done) begin
-                state_in.seq_in = player_sequence; // latch the final player sequence only when done
-                state_in.state = SCORING;
-           end
-
-        end
-
-        SCORING: begin
-            if (reset_or_begin_i) begin
-                state_in.state = IDLE;
-            end
-            else if (score_done) begin
-              state_in.state = ENDGAME;
-            end
-            state_in.score = calculated_score;
-            
-        end
-
-        ENDGAME: begin // will stay here forever unless one resets the game.
-            if (reset_or_begin_i) begin
-                state_in.state = IDLE;
-            end
-            //score = state_out.score;
-            
-        end
-    
-        default: begin
-            state_in.state = IDLE;
-        end
-
         endcase
-
     end
 
     assign score = state_out.score;  //1 if COUNTDOWN, 0 ELSE
     assign countdown_value = countdown_out;
+
+    // NEW: Automatically converts the enum state into its 0-7 numeric value
+    assign state_number_o = state_out.state;
 
 
 endmodule
