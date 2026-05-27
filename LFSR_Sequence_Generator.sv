@@ -53,42 +53,51 @@ always_ff @(posedge clk_i) begin
 
    if (rst_i) begin
 
-            // Non-zero seed
-            lfsr_q        <= 16'hACE1;
+             // Non-zero seed
+             lfsr_q        <= 16'hACE1;
 
-            // Clear sequence
-            sequence_o    <= '0;
+             // Clear sequence
+             sequence_o    <= '0;
 
-            // Reset counter
-            bit_counter_q <= '0;
+             // Reset counter
+             bit_counter_q <= '0;
 
-            done_o        <= 1'b0;
+             done_o        <= 1'b0;
+             mult_cnt      <= '0;
    end
 
-    else if (tick_i && enable_i && !done_o) begin
+     else if (tick_i && enable_i && !done_o) begin
 
-        if (mult_cnt == MULTIPLIER-1) begin
+         if (mult_cnt == MULTIPLIER-1) begin
 
-            // advance LFSR ONLY here
-            lfsr_q <= {
-                lfsr_q[LFSR_WIDTH-2:0],
-                (lfsr_q[15] ^ lfsr_q[13] ^ lfsr_q[12] ^ lfsr_q[10])
-            };
+             // Shift LFSR feedback bit into sequence
+             sequence_o <= {
+                 sequence_o[SEQ_LENGTH-2:0],
+                 feedback
+             };
 
-            mult_cnt <= '0;
-        end
+             // advance LFSR
+             lfsr_q <= {
+                 lfsr_q[LFSR_WIDTH-2:0],
+                 feedback
+             };
 
-        else begin
-            mult_cnt <= mult_cnt + 1;
-        end
+             mult_cnt <= '0;
+             
+             // Increment bit counter after LFSR shift
+             bit_counter_q <= bit_counter_q + 1;
+         end
+
+         else begin
+             mult_cnt <= mult_cnt + 1;
+         end
 
 
-        if (bit_counter_q == SEQ_LENGTH-1) begin
-                done_o <= 1'b1;
-            end
-    end
-end
-
+         if (bit_counter_q == SEQ_LENGTH-1) begin
+                 done_o <= 1'b1;
+             end
+     end
+ end
 
 endmodule
 
