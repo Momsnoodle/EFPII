@@ -31,7 +31,7 @@ module LFSR_Sequence_Generator #(
     // Counts generated bits
     logic [$clog2(SEQ_LENGTH):0] bit_counter_q;
 
-    logic [$clog2(MULTIPLIER)-1:0] mult_cnt;
+    logic [$clog2(MULTIPLIER + 1)-1:0] mult_cnt;
 
     //============================================================
     // Feedback taps
@@ -51,44 +51,47 @@ module LFSR_Sequence_Generator #(
 
 always_ff @(posedge clk_i) begin
 
-   if (rst_i) begin
+    if (rst_i) begin
 
-            // Non-zero seed
-            lfsr_q        <= 16'hACE1;
+        lfsr_q        <= 16'hACE1;
+        sequence_o    <= '0;
+        bit_counter_q <= '0;
+        done_o        <= 1'b0;
+        mult_cnt      <= '0;
 
-            // Clear sequence
-            sequence_o    <= '0;
-
-            // Reset counter
-            bit_counter_q <= '0;
-
-            done_o        <= 1'b0;
-   end
+    end
 
     else if (tick_i && enable_i && !done_o) begin
 
         if (mult_cnt == MULTIPLIER-1) begin
 
-            // advance LFSR ONLY here
+            sequence_o <= {
+                sequence_o[SEQ_LENGTH-2:0],
+                feedback
+            };
+
             lfsr_q <= {
                 lfsr_q[LFSR_WIDTH-2:0],
-                (lfsr_q[15] ^ lfsr_q[13] ^ lfsr_q[12] ^ lfsr_q[10])
+                feedback
             };
 
             mult_cnt <= '0;
-        end
 
-        else begin
-            mult_cnt <= mult_cnt + 1;
-        end
-
-
-        if (bit_counter_q == SEQ_LENGTH-1) begin
+            if (bit_counter_q == SEQ_LENGTH-1) begin
                 done_o <= 1'b1;
             end
+            else begin
+                bit_counter_q <= bit_counter_q + 1;
+            end
+
+        end
+        else begin
+
+            mult_cnt <= mult_cnt + 1;
+
+        end
     end
 end
-
 
 endmodule
 

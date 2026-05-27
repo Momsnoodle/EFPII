@@ -46,7 +46,7 @@ module LED_Sequence_Display #(
             // Display current sequence bit
             //----------------------------------------------------
 
-            led_o <= sequence_i[SEQ_LENGTH-1-index_q];
+            led_o <= sequence_i[SEQ_LENGTH-1-index_q]; //the entry at the current idex
 
             //----------------------------------------------------
             // Advance playback

@@ -17,7 +17,7 @@ module Debouncer#(
   
   typedef struct packed{
     state_enum_e state;
-    logic unsigned [23:0] counter;
+    logic unsigned [31:0] counter;
   } state_t;
   
   state_t state_q;

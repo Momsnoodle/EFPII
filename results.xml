@@ -1,0 +1,8 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1779893958" />
+    <testcase name="MainTest" classname="MainTest" file="/mnt/c/Users/silas/Electronics_for_phys/FPGA_Memorygame_v2/EFPII-main/MainTest.py" lineno="6" time="1.4528143405914307" sim_time_ns="210181.0" ratio_time="144671.61710039066">
+      <failure message="Test failed with RANDOM_SEED=1779893958" />
+    </testcase>
+  </testsuite>
+</testsuites>
