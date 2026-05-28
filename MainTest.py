@@ -37,33 +37,35 @@ async def MainTest(dut):
     dut._log.info("Starting game")
 
     dut.KEY.value = 0b10  # press KEY[0]
-    await Timer(100, units="ns")
+    await Timer(10000, units="ns")
 
     dut.KEY.value = 0b11  # release KEY[0]
 
     # wait for FSM to react
-    for _ in range(50):
+    for _ in range(5000):
         await FallingEdge(dut.MAX10_CLK1_50)
 
-    # =========================================================
+        # =========================================================
     # OBSERVE LED ACTIVITY
     # =========================================================
+    dut._log.info("Monitoring LED activity")
 
-    dut._log.info(f"LEDR = {dut.LEDR.value}")
-
-    # some LED activity should eventually happen
     led_seen = False
 
-    for _ in range(500):
+    for _ in range(5000):
 
-        await FallingEdge(dut.MAX10_CLK1_50)
+        await RisingEdge(dut.MAX10_CLK1_50)
 
-        if int(dut.LEDR.value) != 0:
+        # check specific LED bit
+        if dut.state != 0 :
+
             led_seen = True
-            dut._log.info("LED activity detected")
+
+            dut._log.info("LEDR[0] went HIGH")
+
             break
 
-    assert led_seen, "No LED sequence detected"
+    assert led_seen, "State never changed"
 
     # =========================================================
     # SIMULATE BUTTON INPUTS

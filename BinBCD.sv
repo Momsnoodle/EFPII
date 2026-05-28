@@ -71,7 +71,7 @@ module BinBCD #(
       state_next_d = ADD;
       
       // check if we are done:
-      if (bit_counter_q == 15) state_next_d = WAIT_START_LOW;
+      if (bit_counter_q == BINARY_W -1) state_next_d = WAIT_START_LOW; // changed this from hard coded 15 
     end
      
       
