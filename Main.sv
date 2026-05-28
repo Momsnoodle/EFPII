@@ -4,13 +4,13 @@ module Main #(
   parameter DIGITS_N = 5, 
   parameter DIGITS_BCD_W = 4, 
   parameter OVERSAMPLING = 40, //400 ms Tick for slow tick at display
-  parameter OVERSAMPLING_COUNTDOWN = 50, //500 ms Tick for countdown
+  parameter OVERSAMPLING_COUNTDOWN = 100, //1s Tick for countdown
   parameter SEQ_W = 10 // defines the length of the game --> SEQ_LENGTH * tick_slow = game_time
 )(
   input  logic        MAX10_CLK1_50,
   input  logic [1:0]  KEY,
   output logic [9:0]  LEDR,
-  input  logic [9:0]  SW, // first switch is the start game switch !!!
+  input  logic [9:0]  SW, 
   output logic [7:0]  HEX5,
   output logic [7:0]  HEX0,
   output logic [7:0]  HEX1,
@@ -29,15 +29,6 @@ module Main #(
   logic led_o_test;
 
   assign clk = MAX10_CLK1_50;
-  //assign led_test = 1;
-  //assign LEDR[0] = led_o; 
-  //assign LEDR[1] = led_test;
-
-//always_ff @(posedge clk) begin // this will let it blink --> the tick is only on for one clk every --> for me to check if someting is running
- //   if (tick_countdown) begin
-  //      LEDR[1] <= ~LEDR[1]; // will hold the state after one tick until the next tick will turn it off!
-  //  end
-//end
 
   // =========================================================
   // TICKS
@@ -71,7 +62,7 @@ module Main #(
 
 
 
-//Control the game sequence work properly...
+//Control if the game sequence work properly...
 always_ff @(posedge clk) begin // this will let it blink --> the tick is only on for one clk every --> for me to check if someting is running
     if (tick_countdown) begin
         tick_countdown_stay <= ~tick_countdown_stay; // will hold the state after one tick until the next tick will turn it off!
@@ -138,14 +129,12 @@ always_ff @(posedge clk) begin // this will let it blink --> the tick is only on
     else begin
       LEDR[0]<= 0;
     end
-
 end
   // =========================================================
   // BUTTONS (debounce + oneshot)
   // =========================================================
 
   logic [1:0] button_clean;
-
   genvar i;
   generate
     for (i = 0; i < 2; i++) begin : BTN
@@ -176,7 +165,7 @@ end
   logic [SCORE_W-1:0] score;
   logic [DIGITS_BCD_W-1:0] bcd_score [DIGITS_N-1:0];
   logic [DIGITS_BCD_W-1:0] bcd_countdown [DIGITS_N-1:0];
-  logic [SCORE_W-1:0] countdown_value; // good states are always 00,01,10, but 11 is too much
+  logic [SCORE_W-1:0] countdown_value; 
   logic start_countdown;
   logic [2:0] state;
   logic seq_done;
@@ -193,7 +182,7 @@ end
     .start_i(tick_fast),
     .binary_i(score),
     .bcd_o(bcd_score),
-    .enable_i(score != '0) // display it only if this is on
+    .enable_i(score != '0) 
   );
 
 
@@ -207,7 +196,7 @@ BinBCD #(
     .start_i(tick_countdown),
     .binary_i(countdown_value),
     .bcd_o(bcd_countdown),
-    .enable_i(start_countdown) // display it only if this is on
+    .enable_i(start_countdown) 
   );
 
 
@@ -244,7 +233,6 @@ BinBCD #(
     .reset_i(button_clean[0]),
     .start_i(SW[0]),
     .button_i(button_clean[1]),
-
     .tick_fast(tick_fast),
     .tick_slow(tick_slow),
     .tick_countdown(tick_countdown),

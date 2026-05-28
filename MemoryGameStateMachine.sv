@@ -1,14 +1,14 @@
 
 module MemoryGameStateMachine #(
     parameter SCORE_W = 10, // Score between 0 and SEQ_W, change
-    parameter SEQ_W = 100,
+    parameter SEQ_W = 100, 
     parameter OVER_SAMPLING = 10
 )(
     input logic clk_i,
 
     input logic reset_i, // button 0
     input logic start_i, // switch 0
-    input logic button_i, // button 1
+    input logic button_i, // button 1 
 
     input logic tick_fast,
     input logic tick_slow,
@@ -56,10 +56,8 @@ module MemoryGameStateMachine #(
 
     logic [SEQ_W-1:0] generated_sequence;
     
-
     logic [SEQ_W-1:0] player_sequence;
     logic player_done;
-
 
     logic [SEQ_W-1:0] num_correct;
     logic compare_done;
@@ -67,10 +65,7 @@ module MemoryGameStateMachine #(
 
     logic [SCORE_W-1:0] countdown_out; //2 bit for 3,2,1,0
     
-   
-
     logic score_done;
-
 
     assign start_countdown = (state_out.state == COUNTDOWN); //1 if COUNTDOWN, 0 ELSE
     
@@ -82,8 +77,7 @@ module MemoryGameStateMachine #(
     // =========================================================
 
     logic [15:0] entropy; 
-
-    always_ff @(posedge clk_i) begin //generating a random seed!
+    always_ff @(posedge clk_i) begin //generating a "random" seed!
         entropy <= entropy + 1;
     end
 
@@ -166,7 +160,6 @@ module MemoryGameStateMachine #(
     );
 
     
-
     ScoreAdder #(
     .SEQ_LENGTH(SEQ_W),
     .SCORE_W(SCORE_W)
@@ -181,7 +174,6 @@ module MemoryGameStateMachine #(
 
     always_ff @(posedge clk_i) begin
 
-    
         if (reset_i) begin //set all things to 0 
             state_out.state   <= IDLE;
             state_out.score   <= '0;
@@ -196,11 +188,10 @@ module MemoryGameStateMachine #(
         end
 
     always_comb begin
-        //led_o_test = 1;
         // defaults
         state_in = state_out;
 
-        case (state_out.state)
+        case (state_out.state) begin
 
         IDLE: begin
              if (reset_i) begin
@@ -209,24 +200,21 @@ module MemoryGameStateMachine #(
             if (start_i) begin // start the game
                 state_in.state = GENERATION;
             end
-            //state_in.state = GENERATION; // change the state anyway
         end
 
         
         GENERATION: begin //seems to go here
-             if (reset_i) begin // coming back also works!
+             if (reset_i) begin 
                 state_in.state = IDLE;
              end
-         //state_in.seq_gen = generated_sequence; //always running will be random therefore 
-            if (seq_done) begin // this works
-                state_in.seq_gen = generated_sequence; // maybe this ???
+            if (seq_done) begin 
+                state_in.seq_gen = generated_sequence; 
                 state_in.state = DISPLAY;
             end
         end
 
        
-        DISPLAY: begin // will already start the display since the enable signal of the LED_Sequence_Display is on
-             if (reset_i) begin
+        DISPLAY: begin 
                 state_in.state = IDLE;
              end
             else if (display_done) begin
@@ -245,7 +233,7 @@ module MemoryGameStateMachine #(
 
         end
 
-        PLAYING: begin // will turn on enable_i of Button_Sequence_Capture
+        PLAYING: begin 
            if (reset_i) begin
                 state_in.state = IDLE;
            end
@@ -271,7 +259,6 @@ module MemoryGameStateMachine #(
             if (reset_i) begin
                 state_in.state = IDLE;
             end
-            //score = state_out.score;
         end
     
         default: begin
@@ -282,10 +269,9 @@ module MemoryGameStateMachine #(
 
     end
 
-    assign score = state_out.score;  //1 if COUNTDOWN, 0 ELSE
+    assign score = state_out.score;  
     assign countdown_value = countdown_out;
     assign state_output = state_out.state;
-
 
 endmodule
 
